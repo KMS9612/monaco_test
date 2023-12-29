@@ -1,31 +1,32 @@
 "use client";
+import dynamic from "next/dynamic";
+import * as S from "../src/styles/main";
+import { useState } from "react";
 
-import * as monaco from "monaco-editor";
-import { useEffect, useRef } from "react";
+const MonacoEditor = dynamic(() => import("react-monaco-editor"), {
+  ssr: false,
+});
 
 export default function Home() {
-  const editorRef = useRef(null);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      monaco.editor.create(editorRef.current, {
-        value: `function sayHello () { 
-          console.log("helloWorld")
-        }`,
-        language: "javascript",
-        theme: "vs-dark",
-      });
-    }
-  }, []);
-
+  const [innerCode, setInnerCode] = useState(`
+  const Hello = "helloWolrd";
+  function sayHello () {
+    console.log(Hello);
+  };
+  
+  sayHello();
+  `);
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <h2>CodeEditor</h2>
-      <div
-        id="editor"
-        ref={editorRef}
-        style={{ width: "100%", height: "100%" }}
-      ></div>
-    </div>
+    <S.Wrapper>
+      <S.TopBox>
+        <S.TopHead>CodeEditor</S.TopHead>
+        <S.ThemeChanger>ThemeChange</S.ThemeChanger>
+        {/* Button Components 들어올 자리 */}
+      </S.TopBox>
+
+      {/* Editor */}
+      <MonacoEditor theme="vs-dark" value={innerCode}></MonacoEditor>
+      {/* Editor */}
+    </S.Wrapper>
   );
 }

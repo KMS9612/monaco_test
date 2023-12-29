@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "monaco-editor": "^0.45.0",
+    "@types/react-monaco-editor": "^0.16.0",
+    "@types/styled-components": "^5.1.34",
+    "monaco-editor-webpack-plugin": "^7.1.0",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-monaco-editor": "^0.55.0",
+    "styled-components": "^6.1.6"
   },
   "devDependencies": {
     "@types/node": "^20",
