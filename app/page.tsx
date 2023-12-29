@@ -2,6 +2,7 @@
 import dynamic from "next/dynamic";
 import * as S from "../src/styles/main";
 import { useState } from "react";
+import ThemeChangeModal from "@/src/components/themeModal";
 
 const MonacoEditor = dynamic(() => import("react-monaco-editor"), {
   ssr: false,
@@ -16,16 +17,26 @@ export default function Home() {
   
   sayHello();
   `);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleModal = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   return (
     <S.Wrapper>
+      {/* Modals */}
+      <ThemeChangeModal isOpen={isOpen} handleModal={handleModal} />
+      {/* Modals End */}
       <S.TopBox>
         <S.TopHead>CodeEditor</S.TopHead>
-        <S.ThemeChanger>ThemeChange</S.ThemeChanger>
+        <S.ThemeChanger onClick={handleModal}>ThemeChange</S.ThemeChanger>
         {/* Button Components 들어올 자리 */}
       </S.TopBox>
-
       {/* Editor */}
-      <MonacoEditor theme="vs-dark" value={innerCode}></MonacoEditor>
+      <S.EditorBox>
+        <MonacoEditor theme="vs-dark" value={innerCode}></MonacoEditor>
+      </S.EditorBox>
       {/* Editor */}
     </S.Wrapper>
   );

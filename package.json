@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@types/react-monaco-editor": "^0.16.0",
+    "@types/recoil": "^0.0.9",
     "@types/styled-components": "^5.1.34",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
     "react-monaco-editor": "^0.55.0",
+    "recoil": "^0.7.7",
     "styled-components": "^6.1.6"
   },
   "devDependencies": {
