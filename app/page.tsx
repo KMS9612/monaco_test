@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import * as S from "../src/styles/main";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ThemeChangeModal from "@/src/components/themeModal";
 import { useRecoilValue } from "recoil";
 import { ThemeState } from "@/src/recoil/themeHandler";
@@ -11,19 +11,39 @@ const MonacoEditor = dynamic(() => import("react-monaco-editor"), {
 });
 
 export default function Home() {
-  const [innerCode, setInnerCode] = useState(`
+  const [innerCode, setInnerCode] = useState<string>(`
   const Hello = "helloWolrd";
   function sayHello () {
     console.log(Hello);
+    return Hello
   };
   
-  sayHello();
+  return sayHello();
   `);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [result, setResult] = useState<any>(null);
   const ThemeValue = useRecoilValue(ThemeState);
+  const editorRef = useRef<any>(null);
+
+  const editorDidMount = (editor: any) => {
+    editorRef.current = editor;
+  };
 
   const handleModal = (boolType: boolean) => {
     setIsOpen(boolType);
+  };
+
+  const onChangeSetCode = (newValue: any) => {
+    setInnerCode(newValue);
+  };
+
+  const onClickRunCode = () => {
+    try {
+      const result = new Function(innerCode);
+      setResult(result);
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -36,13 +56,26 @@ export default function Home() {
         <S.ThemeChanger onClick={() => handleModal(true)}>
           ThemeChange
         </S.ThemeChanger>
-        {/* Button Components 들어올 자리 */}
+        <S.RunButton onClick={onClickRunCode}>Run!</S.RunButton>
       </S.TopBox>
-      {/* Editor */}
       <S.EditorBox>
-        <MonacoEditor theme={ThemeValue} value={innerCode}></MonacoEditor>
+        {/* Editor */}
+        <MonacoEditor
+          width="50%"
+          theme={ThemeValue}
+          value={innerCode}
+          onChange={onChangeSetCode}
+          editorDidMount={editorDidMount}
+        ></MonacoEditor>
+        {/* EditorEnd */}
+        {/* Result */}
+        <S.ResultBox $isDark={ThemeValue === "vs-dark"}>
+          Code Result <br />
+          <br />
+          {result}
+        </S.ResultBox>
+        {/* Result End */}
       </S.EditorBox>
-      {/* Editor */}
     </S.Wrapper>
   );
 }
