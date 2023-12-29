@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import * as S from "../src/styles/main";
 import { useState } from "react";
 import ThemeChangeModal from "@/src/components/themeModal";
+import { useRecoilValue } from "recoil";
+import { ThemeState } from "@/src/recoil/themeHandler";
 
 const MonacoEditor = dynamic(() => import("react-monaco-editor"), {
   ssr: false,
@@ -18,6 +20,7 @@ export default function Home() {
   sayHello();
   `);
   const [isOpen, setIsOpen] = useState(false);
+  const ThemeValue = useRecoilValue(ThemeState);
 
   const handleModal = () => {
     setIsOpen((prev) => !prev);
@@ -28,14 +31,14 @@ export default function Home() {
       {/* Modals */}
       <ThemeChangeModal isOpen={isOpen} handleModal={handleModal} />
       {/* Modals End */}
-      <S.TopBox>
-        <S.TopHead>CodeEditor</S.TopHead>
+      <S.TopBox $isDark={ThemeValue === "vs-dark"}>
+        <S.TopHead $isDark={ThemeValue === "vs-dark"}>CodeEditor</S.TopHead>
         <S.ThemeChanger onClick={handleModal}>ThemeChange</S.ThemeChanger>
         {/* Button Components 들어올 자리 */}
       </S.TopBox>
       {/* Editor */}
       <S.EditorBox>
-        <MonacoEditor theme="vs-dark" value={innerCode}></MonacoEditor>
+        <MonacoEditor theme={ThemeValue} value={innerCode}></MonacoEditor>
       </S.EditorBox>
       {/* Editor */}
     </S.Wrapper>

@@ -1,5 +1,7 @@
 import { MouseEvent } from "react";
 import * as S from "../styles/themeModal";
+import { useSetRecoilState } from "recoil";
+import { ThemeState } from "../recoil/themeHandler";
 
 export default function ThemeChangeModal({
   isOpen,
@@ -8,12 +10,33 @@ export default function ThemeChangeModal({
   isOpen: boolean;
   handleModal: () => void;
 }) {
+  const setTheme = useSetRecoilState(ThemeState);
+  const themeList = ["vs-dark", "vs-light"];
+
   const stopPropagation = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
+
+  const onClickChangeTheme = (el: string) => {
+    setTheme(el);
+    handleModal();
+  };
+
   return (
     <S.Container $isOpen={isOpen} onClick={handleModal}>
-      <S.ModalBox onClick={stopPropagation}>Hello</S.ModalBox>
+      <S.ModalBox onClick={stopPropagation}>
+        <S.ModalHeader>변경할 테마를 선택하세요.</S.ModalHeader>
+        <S.ButtonWrapper>
+          {themeList.map((el, index) => (
+            <S.ThemeTypeButton
+              onClick={() => onClickChangeTheme(el)}
+              key={el + index}
+            >
+              {el}
+            </S.ThemeTypeButton>
+          ))}
+        </S.ButtonWrapper>
+      </S.ModalBox>
     </S.Container>
   );
 }
