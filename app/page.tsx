@@ -22,8 +22,8 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const ThemeValue = useRecoilValue(ThemeState);
 
-  const handleModal = () => {
-    setIsOpen((prev) => !prev);
+  const handleModal = (boolType: boolean) => {
+    setIsOpen(boolType);
   };
 
   return (
@@ -33,7 +33,9 @@ export default function Home() {
       {/* Modals End */}
       <S.TopBox $isDark={ThemeValue === "vs-dark"}>
         <S.TopHead $isDark={ThemeValue === "vs-dark"}>CodeEditor</S.TopHead>
-        <S.ThemeChanger onClick={handleModal}>ThemeChange</S.ThemeChanger>
+        <S.ThemeChanger onClick={() => handleModal(true)}>
+          ThemeChange
+        </S.ThemeChanger>
         {/* Button Components 들어올 자리 */}
       </S.TopBox>
       {/* Editor */}

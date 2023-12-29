@@ -8,7 +8,7 @@ export default function ThemeChangeModal({
   handleModal,
 }: {
   isOpen: boolean;
-  handleModal: () => void;
+  handleModal: (booltype: boolean) => void;
 }) {
   const setTheme = useSetRecoilState(ThemeState);
   const themeList = ["vs-dark", "vs-light"];
@@ -19,11 +19,11 @@ export default function ThemeChangeModal({
 
   const onClickChangeTheme = (el: string) => {
     setTheme(el);
-    handleModal();
+    handleModal(false);
   };
 
   return (
-    <S.Container $isOpen={isOpen} onClick={handleModal}>
+    <S.Container $isOpen={isOpen} onClick={() => handleModal(false)}>
       <S.ModalBox onClick={stopPropagation}>
         <S.ModalHeader>변경할 테마를 선택하세요.</S.ModalHeader>
         <S.ButtonWrapper>
